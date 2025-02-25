@@ -1,0 +1,259 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: const MyHomePage(),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key});
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  bool exibirNovoLayout = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Layout com 3 botões'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  exibirNovoLayout = true;
+                });
+              },
+              child: const Text('Botão 1'),
+            ),
+            const SizedBox(height: 16),
+            TextButton(
+              onPressed: () {
+                // Função a ser executada quando o botão for pressionado
+              },
+              child: const Text('Botão 2'),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                // Função a ser executada quando o botão for pressionado
+              },
+              child: const Text('Botão 3'),
+            ),
+            // Novo layout (visível apenas quando exibirNovoLayout for true)
+            if (exibirNovoLayout)
+              Container(
+                margin: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                ),
+                child: Column(
+                  children: [
+                    const Text(
+                      'Título do Layout',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Image.asset(
+                      'caminho/para/sua/imagem.png', // Substitua pelo caminho da sua imagem
+                      height: 100,
+                    ),
+                    const SizedBox(height: 16),
+                    const Text('Texto 1'),
+                    const SizedBox(height: 8),
+                    const Text('Texto 2'),
+                  ],
+                ),
+              ),
+            if (exibirNovoLayout)
+              ElevatedButton(
+                onPressed: () {
+                  // Função a ser executada quando o botão for pressionado
+                },
+                child: const Text('Botão Aleatório'),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// Layout para o botão 2
+Widget _buildNovoLayout1() {
+  return Container(
+    margin: const EdgeInsets.all(16),
+    padding: const EdgeInsets.all(16),
+    decoration: BoxDecoration(
+      border: Border.all(color: Colors.grey),
+    ),
+    child: Column(
+      children: [
+        const Text(
+          'Título do Layout 1',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 16),
+        Image.asset(
+          'caminho/para/sua/imagem1.png', // Substitua pelo caminho da sua imagem
+          height: 100,
+        ),
+        const SizedBox(height: 16),
+        const Text('Texto 1 do Layout 1'),
+        const SizedBox(height: 8),
+        const Text('Texto 2 do Layout 1'),
+      ],
+    ),
+  );
+}
+
+// Layout para o botão 3
+Widget _buildNovoLayout2() {
+  return Container(
+    margin: const EdgeInsets.all(16),
+    padding: const EdgeInsets.all(16),
+    decoration: BoxDecoration(
+      border: Border.all(color: Colors.grey),
+    ),
+    child: Column(
+      children: [
+        const Text(
+          'Título do Layout 2',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 16),
+        Image.asset(
+          'caminho/para/sua/imagem2.png', // Substitua pelo caminho da sua imagem
+          height: 100,
+        ),
+        const SizedBox(height: 16),
+        const Text('Texto 1 do Layout 2'),
+        const SizedBox(height: 8),
+        const Text('Texto 2 do Layout 2'),
+      ],
+    ),
+  );
+}
+
+// ... (código anterior)
+
+if (exibirNovoLayout)
+  _buildNovoLayout(); // Exibe o layout do botão 1
+
+if (exibirNovoLayout1)
+  _buildNovoLayout1(); // Exibe o layout do botão 2
+
+if (exibirNovoLayout2)
+  _buildNovoLayout2(); // Exibe o layout do botão 3
+
+// ... (resto do código)
+
+// ... (código anterior)
+
+TextButton(
+  onPressed: () {
+    setState(() {
+      exibirNovoLayout1 = true;
+    });
+  },
+  child: const Text('Botão 2'),
+),
+
+// ...
+
+ElevatedButton(
+  onPressed: () {
+    setState(() {
+      exibirNovoLayout2 = true;
+    });
+  },
+  child: const Text('Botão 3'),
+),
+
+// ... (resto do código)
+
+import 'package:flutter/material.dart';
+
+// ... (código anterior)
+
+class _MyHomePageState extends State<MyHomePage> {
+  bool exibirNovoLayout = false;
+  bool exibirNovoLayout1 = false;
+  bool exibirNovoLayout2 = false;
+
+  // ... (widgets _buildNovoLayout, _buildNovoLayout1 e _buildNovoLayout2)
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      // ... (código anterior)
+
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  exibirNovoLayout = true;
+                });
+              },
+              child: const Text('Botão 1'),
+            ),
+            const SizedBox(height: 16),
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  exibirNovoLayout1 = true;
+                });
+              },
+              child: const Text('Botão 2'),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  exibirNovoLayout2 = true;
+                });
+              },
+              child: const Text('Botão 3'),
+            ),
+            if (exibirNovoLayout)
+              _buildNovoLayout(),
+            if (exibirNovoLayout1)
+              _buildNovoLayout1(),
+            if (exibirNovoLayout2)
+              _buildNovoLayout2(),
+          ],
+        ),
+      ),
+    );
+  }
+}
