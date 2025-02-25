@@ -1,49 +1,77 @@
-import 'package:flutter/material.dart'; // Importa o pacote material.dart, que contém widgets e funcionalidades básicas do Flutter
+import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp()); // Executa o aplicativo MyApp
+  runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget { // Define a classe MyApp, que representa o widget raiz do aplicativo
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
-  Widget build(BuildContext context) { // Método build() que retorna o widget que será renderizado na tela
-    return MaterialApp( // Widget MaterialApp, que configura o aplicativo com tema, rotas, etc.
-      home: MyHomePage(), // Define a página inicial do aplicativo como MyHomePage
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: const MyHomePage(),
     );
   }
 }
 
-class MyHomePage extends StatelessWidget { // Define a classe MyHomePage, que representa a página inicial do aplicativo
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key});
+
   @override
-  Widget build(BuildContext context) { // Método build() que retorna o widget que será renderizado na tela
-    return Scaffold( // Widget Scaffold, que define a estrutura básica da tela com AppBar, body, etc.
-      appBar: AppBar( // Widget AppBar, que define a barra superior da tela
-        title: Text('Meu Aplicativo'), // Define o título da AppBar
-      ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => SegundaTela()),
-            );
-          }, child: Text('Ir para a Segunda Tela')),
-      ),
-    );
-  }
+  State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class SegundaTela extends StatelessWidget {
+class _MyHomePageState extends State<MyHomePage> {
+  bool exibirNovoLayout = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Segunda Tela'),
+        title: const Text('Primeira página em Flutter'),
       ),
       body: Center(
-        child: Text('Conteúdo da Segunda Tela'),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  exibirNovoLayout = true;
+                });
+              },
+              child: const Text('Botão 1'),
+            ),
+            const SizedBox(height: 16),
+            TextButton(
+              onPressed: () {
+                // Função a ser executada quando o botão for pressionado
+              },
+              child: const Text('Botão 2'),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                // Função a ser executada quando o botão for pressionado
+              },
+              child: const Text('Botão 3'),
+            ),
+          ],
         ),
+      ),
+      floatingActionButton: Padding( // Adiciona padding para afastar do canto
+        padding: const EdgeInsets.only(left: 30.0), // Ajuste o valor conforme necessário
+        child: Align(
+          alignment: Alignment.bottomLeft,
+          child: FloatingActionButton(
+            onPressed: () {
+              // Função para o novo botão
+            },
+            child: const Icon(Icons.add), // Você pode usar um ícone ou texto
+          ),
+        ),
+      ),
     );
   }
 }
-
