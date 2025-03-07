@@ -38,7 +38,9 @@ class _MyHomePageState extends State<MyHomePage> {
           alignment: Alignment.bottomLeft,
           child: FloatingActionButton(
             onPressed: () {
-              // Função para o novo botão
+              setState(() {
+                exibirNovoLayout = !exibirNovoLayout;
+              });
             },
             child: const Icon(Icons.add),
           ),
@@ -56,12 +58,14 @@ class _MyHomePageState extends State<MyHomePage> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => NovoLayoutTextosLongos(textos: [
-                  'A jornada de mil milhas começa com um único passo.',
-                  'A persistência realiza o impossível.',
-                  'A sabedoria é a filha da experiência.',
-                  'A verdadeira medida de um homem é como ele trata alguém que não pode fazer absolutamente nada por ele.',
-                ])),
+                MaterialPageRoute(
+                  builder: (context) => NovoLayoutTextosLongos(textos: [
+                    'A jornada de mil milhas começa com um único passo.',
+                    'A persistência realiza o impossível.',
+                    'A sabedoria é a filha da experiência.',
+                    'A verdadeira medida de um homem é como ele trata alguém que não pode fazer absolutamente nada por ele.',
+                  ]),
+                ),
               );
             },
             child: const Text('Botão 1'),
@@ -71,12 +75,14 @@ class _MyHomePageState extends State<MyHomePage> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => NovoLayoutTextosLongos(textos: [
-                  'Acredite em si mesmo e você estará no caminho certo.', // Novo texto motivacional
-                  'A vida de um escritor é solitária.',
-                  'O oceano fascina a humanidade.',
-                  'IA revoluciona a sociedade.',
-                ])),
+                MaterialPageRoute(
+                  builder: (context) => NovoLayoutTextosLongos(textos: [
+                    'Acredite em si mesmo e você estará no caminho certo.',
+                    'A vida de um escritor é solitária.',
+                    'O oceano fascina a humanidade.',
+                    'IA revoluciona a sociedade.',
+                  ]),
+                ),
               );
             },
             child: const Text('Botão 2'),
@@ -86,12 +92,14 @@ class _MyHomePageState extends State<MyHomePage> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => NovoLayoutTextosLongos(textos: [
-                  'O tempo cura todas as feridas.',
-                  'A esperança é a última que morre.',
-                  'A união faz a força.',
-                  'A prática leva à perfeição.',
-                ])),
+                MaterialPageRoute(
+                  builder: (context) => NovoLayoutTextosLongos(textos: [
+                    'O tempo cura todas as feridas.',
+                    'A esperança é a última que morre.',
+                    'A união faz a força.',
+                    'A prática leva à perfeição.',
+                  ]),
+                ),
               );
             },
             child: const Text('Botão 3'),
@@ -129,7 +137,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: textosCompletos.map((texto) => Text(texto, style: TextStyle(fontSize: 18))).toList(),
+                    children: textosCompletos
+                        .map((texto) => Text(texto, style: TextStyle(fontSize: 18)))
+                        .toList(),
                   ),
                 ),
                 const SizedBox(width: 2),
