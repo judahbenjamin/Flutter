@@ -54,23 +54,45 @@ class _MyHomePageState extends State<MyHomePage> {
         children: [
           ElevatedButton(
             onPressed: () {
-              setState(() {
-                exibirNovoLayout = true;
-              });
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => NovoLayoutTextosLongos(textos: [
+                  'A jornada de mil milhas começa com um único passo.',
+                  'A persistência realiza o impossível.',
+                  'A sabedoria é a filha da experiência.',
+                  'A verdadeira medida de um homem é como ele trata alguém que não pode fazer absolutamente nada por ele.',
+                ])),
+              );
             },
             child: const Text('Botão 1'),
           ),
           const SizedBox(height: 16),
           TextButton(
             onPressed: () {
-              // Função a ser executada quando o botão for pressionado
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => NovoLayoutTextosLongos(textos: [
+                  'Acredite em si mesmo e você estará no caminho certo.', // Novo texto motivacional
+                  'A vida de um escritor é solitária.',
+                  'O oceano fascina a humanidade.',
+                  'IA revoluciona a sociedade.',
+                ])),
+              );
             },
             child: const Text('Botão 2'),
           ),
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () {
-              // Função a ser executada quando o botão for pressionado
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => NovoLayoutTextosLongos(textos: [
+                  'O tempo cura todas as feridas.',
+                  'A esperança é a última que morre.',
+                  'A união faz a força.',
+                  'A prática leva à perfeição.',
+                ])),
+              );
             },
             child: const Text('Botão 3'),
           ),
@@ -85,7 +107,6 @@ class _MyHomePageState extends State<MyHomePage> {
       'A persistência realiza o impossível.',
       'A sabedoria é a filha da experiência.',
       'A verdadeira medida de um homem é como ele trata alguém que não pode fazer absolutamente nada por ele.',
-      'A vida é o que acontece enquanto você está ocupado fazendo outros planos.',
     ];
 
     return Padding(
@@ -99,6 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ),
+          const SizedBox(height: 120),
           Expanded(
             child: Row(
               children: <Widget>[
@@ -107,15 +129,18 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: textosCompletos.map((texto) => Text(texto)).toList(),
+                    children: textosCompletos.map((texto) => Text(texto, style: TextStyle(fontSize: 18))).toList(),
                   ),
                 ),
-                const SizedBox(width: 16),
+                const SizedBox(width: 2),
                 Expanded(
                   flex: 1,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: List.generate(4, (index) => _buildQuadrado(index)),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 20.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: List.generate(4, (index) => _buildQuadrado(index)),
+                    ),
                   ),
                 ),
               ],
@@ -142,12 +167,12 @@ class _MyHomePageState extends State<MyHomePage> {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const NovoLayoutQuadrado()),
+          MaterialPageRoute(builder: (context) => const NovoLayoutQuadradoImagem()),
         );
       },
       child: Container(
-        width: 50,
-        height: 50,
+        width: 35,
+        height: 35,
         decoration: BoxDecoration(
           border: Border.all(color: Colors.grey),
         ),
@@ -156,14 +181,14 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class NovoLayoutQuadrado extends StatelessWidget {
-  const NovoLayoutQuadrado({super.key});
+class NovoLayoutQuadradoImagem extends StatelessWidget {
+  const NovoLayoutQuadradoImagem({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Novo Layout'),
+        title: const Text('Novo Layout Quadrado'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -184,6 +209,9 @@ class NovoLayoutQuadrado extends StatelessWidget {
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey),
                   ),
+                  child: const Center(
+                    child: Text('Conteúdo do quadrado'),
+                  ),
                 ),
               ),
             ),
@@ -191,9 +219,81 @@ class NovoLayoutQuadrado extends StatelessWidget {
               padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.pop(context); // Volta para a tela anterior
+                  Navigator.pop(context);
                 },
-                child: const Text('Botão'),
+                child: const Text('Voltar'),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class NovoLayoutTextosLongos extends StatelessWidget {
+  final List<String> textos;
+
+  const NovoLayoutTextosLongos({super.key, required this.textos});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Novo Layout'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: <Widget>[
+            const Padding(
+              padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
+              child: Text(
+                'Título',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+            ),
+            const SizedBox(height: 120),
+            Expanded(
+              child: ListView.builder(
+                itemCount: textos.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(textos[index], style: TextStyle(fontSize: 18)),
+                        ),
+                        const SizedBox(width: 2),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const NovoLayoutQuadradoImagem()),
+                            );
+                          },
+                          child: Container(
+                            width: 35,
+                            height: 35,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('Voltar'),
               ),
             ),
           ],
