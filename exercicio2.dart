@@ -31,7 +31,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: const Text('Primeira página em Flutter'),
       ),
-      body: exibirNovoLayout ? _novoLayout() : _layoutPadrao(),
+      body: exibirNovoLayout ? _novoLayoutTabela() : _layoutPadrao(),
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(left: 30.0),
         child: Align(
@@ -109,14 +109,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget _novoLayout() {
-    final List<String> textosCompletos = [
-      'A jornada de mil milhas começa com um único passo.',
-      'A persistência realiza o impossível.',
-      'A sabedoria é a filha da experiência.',
-      'A verdadeira medida de um homem é como ele trata alguém que não pode fazer absolutamente nada por ele.',
-    ];
-
+  Widget _novoLayoutTabela() {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -124,47 +117,50 @@ class _MyHomePageState extends State<MyHomePage> {
           const Padding(
             padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
             child: Text(
-              'Título',
+              'Tabela de Dados',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ),
-          const SizedBox(height: 120),
-          Expanded(
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  flex: 2,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: textosCompletos
-                        .map((texto) => Text(texto, style: TextStyle(fontSize: 18)))
-                        .toList(),
-                  ),
-                ),
-                const SizedBox(width: 2),
-                Expanded(
-                  flex: 1,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 20.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: List.generate(4, (index) => _buildQuadrado(index)),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+          const SizedBox(height: 20),
+          Table(
+            border: TableBorder.all(),
+            columnWidths: const {
+              0: FlexColumnWidth(),
+              1: FlexColumnWidth(),
+              2: FlexColumnWidth(),
+            },
+            children: const [
+              TableRow(children: [
+                TableCell(child: Padding(padding: EdgeInsets.all(8.0), child: Text('Coluna 1, Linha 1'))),
+                TableCell(child: Padding(padding: EdgeInsets.all(8.0), child: Text('Coluna 2, Linha 1'))),
+                TableCell(child: Padding(padding: EdgeInsets.all(8.0), child: Text('Coluna 3, Linha 1'))),
+              ]),
+              TableRow(children: [
+                TableCell(child: Padding(padding: EdgeInsets.all(8.0), child: Text('Coluna 1, Linha 2'))),
+                TableCell(child: Padding(padding: EdgeInsets.all(8.0), child: Text('Coluna 2, Linha 2'))),
+                TableCell(child: Padding(padding: EdgeInsets.all(8.0), child: Text('Coluna 3, Linha 2'))),
+              ]),
+              TableRow(children: [
+                TableCell(child: Padding(padding: EdgeInsets.all(8.0), child: Text('Coluna 1, Linha 3'))),
+                TableCell(child: Padding(padding: EdgeInsets.all(8.0), child: Text('Coluna 2, Linha 3'))),
+                TableCell(child: Padding(padding: EdgeInsets.all(8.0), child: Text('Coluna 3, Linha 3'))),
+              ]),
+              TableRow(children: [
+                TableCell(child: Padding(padding: EdgeInsets.all(8.0), child: Text('Coluna 1, Linha 4'))),
+                TableCell(child: Padding(padding: EdgeInsets.all(8.0), child: Text('Coluna 2, Linha 4'))),
+                TableCell(child: Padding(padding: EdgeInsets.all(8.0), child: Text('Coluna 3, Linha 4'))),
+              ]),
+            ],
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
+          const SizedBox(height: 20),
+          Center(
             child: ElevatedButton(
               onPressed: () {
                 setState(() {
                   exibirNovoLayout = false;
                 });
               },
-              child: const Text('Botão'),
+              child: const Text('Voltar'),
             ),
           ),
         ],
