@@ -1,75 +1,79 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MeuApp());
+  runApp(const MyApp());
 }
 
-class MeuApp extends StatelessWidget {
-  const MeuApp({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Tela Cadastro',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MontaTela(),
+      title: 'Cadastro',
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: const ListaNomesTela(),
     );
   }
 }
 
-class MontaTela extends StatefulWidget {
-  const MontaTela({super.key});
+class ListaNomesTela extends StatefulWidget {
+  const ListaNomesTela({super.key});
+
   @override
-  StatusTelaAplicativo createState() => StatusTelaAplicativo();
+  createState() => _ListaNomesTelaState();
 }
 
-class StatusTelaAplicativo extends State<MontaTela> {
-  final TextEditingController _controller = TextEditingController();
-  String _nome = ' ';
+class _ListaNomesTelaState extends State<ListaNomesTela> {
+  final TextEditingController _nomeController = TextEditingController();
+  String? _nome;
+  final List<String> _listanomes = [];
 
-  void _atualizarNome() {
-    setState(() {
-      _nome = _controller.text;
-    });
+  void _addName() {
+    if (_nome != null && _nome!.isNotEmpty) {
+      setState(() {
+        _listanomes.add(_nome!);
+        _nomeController.clear();
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Cadastro')),
-
+      appBar: AppBar(title: const Text('Cadastro de Nomes')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column (
-        mainAxisAlignment: MainAxisAlignment.center,
-
+        child: Column(
           children: [
+           
+					  Expanded(
+              child: ListView.builder(
+                itemCount: _listanomes.length,
+                itemBuilder: (context, index) => ListTile(
+                  title: Text(_listanomes[index]),
+                ),
+              ),
+            ),
 
-            TextField (
-              controller: _controller,
+            TextField(
+              controller: _nomeController,
               decoration: const InputDecoration(
                 labelText: 'Nome',
                 border: OutlineInputBorder(),
               ),
+              onChanged: (value) => _nome = value,
             ),
-            const SizedBox(height: 16),
-
-            ElevatedButton(
-              onPressed: _atualizarNome,
+            const SizedBox(height: 12),
+            
+						ElevatedButton(
+              onPressed: _addName,
               child: const Text('Registrar'),
             ),
-            const SizedBox(height: 20),
 
-            Text(
-              _nome,
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
           ],
         ),
       ),
     );
   }
-
 }
