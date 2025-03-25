@@ -27,9 +27,23 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('agua.jpg'), // Substitua pelo caminho da sua imagem
+          fit: BoxFit.cover, // Ajusta a imagem para cobrir todo o espaço disponível
+        ),
+      ),
+    child: Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         title: const Text('Primeira página em Flutter'),
+        titleTextStyle: const TextStyle(
+          color: Colors.white,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+        backgroundColor: Colors.blue,
       ),
       body: exibirNovoLayout ? _novoLayoutTabela() : _layoutPadrao(),
       floatingActionButton: Padding(
@@ -42,12 +56,16 @@ class _MyHomePageState extends State<MyHomePage> {
                 exibirNovoLayout = !exibirNovoLayout;
               });
             },
+            foregroundColor: Colors.white,
+            backgroundColor: Colors.blue,
             child: const Icon(Icons.add),
           ),
         ),
       ),
+    ),
     );
   }
+  
 
   Widget _layoutPadrao() {
     return Center(
@@ -68,6 +86,15 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               );
             },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.white,
+              foregroundColor: Colors.blue,
+              padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+              textStyle: TextStyle(fontSize: 20),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
             child: const Text('Botão 1'),
           ),
           const SizedBox(height: 16),
@@ -85,6 +112,15 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               );
             },
+             style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.white,
+              foregroundColor: Colors.blue,
+              padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+              textStyle: TextStyle(fontSize: 20),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
             child: const Text('Botão 2'),
           ),
           const SizedBox(height: 16),
@@ -102,6 +138,15 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               );
             },
+             style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.white,
+              foregroundColor: Colors.blue,
+              padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+              textStyle: TextStyle(fontSize: 20),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
             child: const Text('Botão 3'),
           ),
         ],
