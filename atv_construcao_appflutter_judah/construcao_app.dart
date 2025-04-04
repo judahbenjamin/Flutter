@@ -12,8 +12,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/inserir': (context) => InserirPage(),
         '/listar': (context) => ListarPage(),
-        '/editar': (context) => EditarPage(),
-        '/excluir': (context) => ExcluirPage(),
+        '/editar_lista': (context) => ListaEditadosPage(),
+        '/excluir_lista': (context) => ListaExcluidosPage(),
       },
     );
   }
@@ -34,9 +34,9 @@ class HomePage extends StatelessWidget {
             SizedBox(height: 20),
             _buildButton(context, 'LISTAR', '/listar'),
             SizedBox(height: 20),
-            _buildButton(context, 'EDITAR', '/editar'),
+            _buildButton(context, 'EDITAR', '/editar_lista'),
             SizedBox(height: 20),
-            _buildButton(context, 'EXCLUIR', '/excluir'),
+            _buildButton(context, 'EXCLUIR', '/excluir_lista'),
           ],
         ),
       ),
@@ -156,7 +156,6 @@ class _InserirPageState extends State<InserirPage> {
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    // Adiciona os dados à lista
                     dadosCadastrados.add({
                       'nome': _nomeController.text,
                       'cpf': _cpfController.text,
@@ -166,7 +165,6 @@ class _InserirPageState extends State<InserirPage> {
                       'telefone': _telefoneController.text,
                     });
 
-                    // Navega para a ListarPage
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -185,7 +183,9 @@ class _InserirPageState extends State<InserirPage> {
   }
 }
 
-List<Map<String, String>> dadosCadastrados = []; // Lista para armazenar os dados
+List<Map<String, String>> dadosCadastrados = [];
+List<Map<String, String>> dadosEditados = [];
+List<Map<String, String>> dadosExcluidos = [];
 
 class ListarPage extends StatefulWidget {
   @override
@@ -245,14 +245,17 @@ class _ListarPageState extends State<ListarPage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async { // Adicionado async
                     if (_selectedIndex != null) {
-                      Navigator.push(
+                      final result = await Navigator.push( // Adicionado await
                         context,
                         MaterialPageRoute(
                           builder: (context) => EditarPage(index: _selectedIndex!),
                         ),
                       );
+                      if (result == true) { // Verifica o valor de retorno
+                        setState(() {}); // Atualiza a tela ListarPage
+                      }
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text('Selecione um cliente para editar')),
@@ -264,9 +267,10 @@ class _ListarPageState extends State<ListarPage> {
                 ElevatedButton(
                   onPressed: () {
                     if (_selectedIndex != null) {
+                      dadosExcluidos.add(dadosCadastrados[_selectedIndex!]);
+                      dadosCadastrados.removeAt(_selectedIndex!);
                       setState(() {
-                        dadosCadastrados.removeAt(_selectedIndex!);
-                        _selectedIndex = null; // Limpa a seleção após excluir
+                        _selectedIndex = null;
                       });
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -278,7 +282,7 @@ class _ListarPageState extends State<ListarPage> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).popUntil(ModalRoute.withName('/')); // Volta para a página inicial
+                    Navigator.of(context).popUntil(ModalRoute.withName('/'));
                   },
                   child: Text('VOLTAR'),
                 ),
@@ -399,7 +403,7 @@ class _EditarPageState extends State<EditarPage> {
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    // Atualiza os dados na lista
+                    dadosEditados.add(dadosCadastrados[widget.index!]);
                     dadosCadastrados[widget.index!] = {
                       'nome': _nomeController.text,
                       'cpf': _cpfController.text,
@@ -409,9 +413,7 @@ class _EditarPageState extends State<EditarPage> {
                       'telefone': _telefoneController.text,
                     };
 
-                    // Navega de volta para a ListarPage
-                    Navigator.pop(context);
-                    setState(() {}); // Atualiza a tela
+                    Navigator.pop(context, true); // Adicionado valor de retorno
                   }
                 },
                 child: Text('SALVAR'),
@@ -424,15 +426,71 @@ class _EditarPageState extends State<EditarPage> {
   }
 }
 
-class ExcluirPage extends StatelessWidget {
+class ListaEditadosPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Excluir'),
+        title: Text('Itens Editados'),
       ),
-      body: Center(
-        child: Text('Página de Excluir'),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ListView.builder(
+          itemCount: dadosEditados.length,
+          itemBuilder: (context, index) {
+            return Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text('Nome: ${dadosEditados[index]['nome']}'),
+                    Text('CPF: ${dadosEditados[index]['cpf']}'),
+                    Text('E-mail: ${dadosEditados[index]['email']}'),
+                    Text('Nome da Mãe: ${dadosEditados[index]['nomeMae']}'),
+                    Text('Endereço: ${dadosEditados[index]['endereco']}'),
+                    Text('Telefone: ${dadosEditados[index]['telefone']}'),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class ListaExcluidosPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Itens Excluídos'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ListView.builder(
+          itemCount: dadosExcluidos.length,
+          itemBuilder: (context, index) {
+            return Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text('Nome: ${dadosExcluidos[index]['nome']}'),
+                    Text('CPF: ${dadosExcluidos[index]['cpf']}'),
+                    Text('E-mail: ${dadosExcluidos[index]['email']}'),
+                    Text('Nome da Mãe: ${dadosExcluidos[index]['nomeMae']}'),
+                    Text('Endereço: ${dadosExcluidos[index]['endereco']}'),
+                    Text('Telefone: ${dadosExcluidos[index]['telefone']}'),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
       ),
     );
   }
