@@ -31,41 +31,40 @@ class _MyHomePageState extends State<MyHomePage> {
       decoration: const BoxDecoration(
         image: DecorationImage(
           image: AssetImage('agua.jpg'), // Substitua pelo caminho da sua imagem
-          fit: BoxFit.cover, // Ajusta a imagem para cobrir todo o espaço disponível
+          fit: BoxFit.cover,
         ),
       ),
-    child: Scaffold(
-      backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        title: const Text('Primeira página em Flutter'),
-        titleTextStyle: const TextStyle(
-          color: Colors.white,
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          title: const Text('Primeira página em Flutter'),
+          titleTextStyle: const TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+          backgroundColor: Colors.blue,
         ),
-        backgroundColor: Colors.blue,
-      ),
-      body: exibirNovoLayout ? _novoLayoutTabela() : _layoutPadrao(),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(left: 30.0),
-        child: Align(
-          alignment: Alignment.bottomLeft,
-          child: FloatingActionButton(
-            onPressed: () {
-              setState(() {
-                exibirNovoLayout = !exibirNovoLayout;
-              });
-            },
-            foregroundColor: Colors.white,
-            backgroundColor: Colors.blue,
-            child: const Icon(Icons.add),
+        body: exibirNovoLayout ? _novoLayoutTabela() : _layoutPadrao(),
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.only(left: 30.0),
+          child: Align(
+            alignment: Alignment.bottomLeft,
+            child: FloatingActionButton(
+              onPressed: () {
+                setState(() {
+                  exibirNovoLayout = !exibirNovoLayout;
+                });
+              },
+              foregroundColor: Colors.white,
+              backgroundColor: Colors.blue,
+              child: const Icon(Icons.add),
+            ),
           ),
         ),
       ),
-    ),
     );
   }
-  
 
   Widget _layoutPadrao() {
     return Center(
@@ -89,11 +88,14 @@ class _MyHomePageState extends State<MyHomePage> {
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white,
               foregroundColor: Colors.blue,
-              padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-              textStyle: TextStyle(fontSize: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+              textStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(10),
               ),
+              elevation: 8,
+              shadowColor: Colors.blueAccent,
+              minimumSize: const Size(200, 50),
             ),
             child: const Text('Botão 1'),
           ),
@@ -112,14 +114,17 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               );
             },
-             style: ElevatedButton.styleFrom(
+            style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white,
               foregroundColor: Colors.blue,
-              padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-              textStyle: TextStyle(fontSize: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+              textStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(10),
               ),
+              elevation: 8,
+              shadowColor: Colors.blueAccent,
+              minimumSize: const Size(200, 50),
             ),
             child: const Text('Botão 2'),
           ),
@@ -138,14 +143,17 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               );
             },
-             style: ElevatedButton.styleFrom(
+            style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white,
               foregroundColor: Colors.blue,
-              padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-              textStyle: TextStyle(fontSize: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+              textStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(10),
               ),
+              elevation: 8,
+              shadowColor: Colors.blueAccent,
+              minimumSize: const Size(200, 50),
             ),
             child: const Text('Botão 3'),
           ),
@@ -159,42 +167,118 @@ class _MyHomePageState extends State<MyHomePage> {
       padding: const EdgeInsets.all(16.0),
       child: Column(
         children: <Widget>[
-          const Padding(
-            padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
+          Padding(
+            padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
             child: Text(
               'Tabela de Dados',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue,
+              ),
             ),
           ),
           const SizedBox(height: 20),
           Table(
-            border: TableBorder.all(),
+            border: TableBorder.all(color: Colors.grey),
             columnWidths: const {
               0: FlexColumnWidth(),
               1: FlexColumnWidth(),
               2: FlexColumnWidth(),
             },
             children: const [
-              TableRow(children: [
-                TableCell(child: Padding(padding: EdgeInsets.all(8.0), child: Text('Acredite em você!'))),
-                TableCell(child: Padding(padding: EdgeInsets.all(8.0), child: Text('Seja a mudança.'))),
-                TableCell(child: Padding(padding: EdgeInsets.all(8.0), child: Text('O futuro é agora.'))),
-              ]),
-              TableRow(children: [
-                TableCell(child: Padding(padding: EdgeInsets.all(8.0), child: Text('Você é capaz!'))),
-                TableCell(child: Padding(padding: EdgeInsets.all(8.0), child: Text('Nunca desista.'))),
-                TableCell(child: Padding(padding: EdgeInsets.all(8.0), child: Text('Sonhe grande!'))),
-              ]),
-              TableRow(children: [
-                TableCell(child: Padding(padding: EdgeInsets.all(8.0), child: Text('Aja com coragem!'))),
-                TableCell(child: Padding(padding: EdgeInsets.all(8.0), child: Text('Aprenda sempre.'))),
-                TableCell(child: Padding(padding: EdgeInsets.all(8.0), child: Text('Faça a diferença!'))),
-              ]),
-              TableRow(children: [
-                TableCell(child: Padding(padding: EdgeInsets.all(8.0), child: Text('Seja resiliente!'))),
-                TableCell(child: Padding(padding: EdgeInsets.all(8.0), child: Text('Viva o presente.'))),
-                TableCell(child: Padding(padding: EdgeInsets.all(8.0), child: Text('Inspire outros!'))),
-              ]),
+              TableRow(
+                decoration: BoxDecoration(color: Colors.white),
+                children: [
+                  TableCell(
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text('Acredite em você!'),
+                    ),
+                  ),
+                  TableCell(
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text('Seja a mudança.'),
+                    ),
+                  ),
+                  TableCell(
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text('O futuro é agora.'),
+                    ),
+                  ),
+                ],
+              ),
+              TableRow(
+                decoration: BoxDecoration(color: Colors.white),
+                children: [
+                  TableCell(
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text('Você é capaz!'),
+                    ),
+                  ),
+                  TableCell(
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text('Nunca desista.'),
+                    ),
+                  ),
+                  TableCell(
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text('Sonhe grande!'),
+                    ),
+                  ),
+                ],
+              ),
+              TableRow(
+                decoration: BoxDecoration(color: Colors.white),
+                children: [
+                  TableCell(
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text('Aja com coragem!'),
+                    ),
+                  ),
+                  TableCell(
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text('Aprenda sempre.'),
+                    ),
+                  ),
+                  TableCell(
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text('Faça a diferença!'),
+                    ),
+                  ),
+                ],
+              ),
+              TableRow(
+                decoration: BoxDecoration(color: Colors.white),
+                children: [
+                  TableCell(
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text('Seja resiliente!'),
+                    ),
+                  ),
+                  TableCell(
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text('Viva o presente.'),
+                    ),
+                  ),
+                  TableCell(
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text('Inspire outros!'),
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
           const SizedBox(height: 20),
@@ -205,28 +289,19 @@ class _MyHomePageState extends State<MyHomePage> {
                   exibirNovoLayout = false;
                 });
               },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                textStyle: const TextStyle(fontSize: 18),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
               child: const Text('Voltar'),
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildQuadrado(int index) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const NovoLayoutQuadradoImagem()),
-        );
-      },
-      child: Container(
-        width: 35,
-        height: 35,
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey),
-        ),
       ),
     );
   }
@@ -282,57 +357,96 @@ class NovoLayoutQuadradoImagem extends StatelessWidget {
   }
 }
 
-class NovoLayoutTextosLongos extends StatelessWidget {
+class NovoLayoutTextosLongos extends StatefulWidget { // Alterado para StatefulWidget
   final List<String> textos;
 
   const NovoLayoutTextosLongos({super.key, required this.textos});
+
+  @override
+  State<NovoLayoutTextosLongos> createState() => _NovoLayoutTextosLongosState();
+}
+
+class _NovoLayoutTextosLongosState extends State<NovoLayoutTextosLongos> {
+  late List<String> imagens;
+
+  @override
+  void initState() {
+    super.initState();
+    imagens = List.generate(widget.textos.length, (index) => 'imagem${index + 1}.jpg');
+  }
+
+  void alterarImagens() {
+    setState(() {
+      imagens = List.generate(widget.textos.length, (index) => 'imagem${widget.textos.length - index}.jpg');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Novo Layout'),
+        backgroundColor: Colors.blue,
+        titleTextStyle: const TextStyle(
+          color: Colors.white,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: <Widget>[
-            const Padding(
-              padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
+            Padding(
+              padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
               child: Text(
                 'Título',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue,
+                ),
               ),
             ),
-            const SizedBox(height: 120),
+            const SizedBox(height: 20),
             Expanded(
               child: ListView.builder(
-                itemCount: textos.length,
+                itemCount: widget.textos.length,
                 itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(textos[index], style: TextStyle(fontSize: 18)),
-                        ),
-                        const SizedBox(width: 2),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const NovoLayoutQuadradoImagem()),
-                            );
-                          },
-                          child: Container(
-                            width: 35,
-                            height: 35,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
+                  return Card(
+                    elevation: 4,
+                    margin: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              widget.textos[index],
+                              style: const TextStyle(fontSize: 18),
                             ),
                           ),
-                        ),
-                      ],
+                          const SizedBox(width: 10),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ConteudoDaImagem(
+                                    titulo: 'Imagem ${index + 1}',
+                                    imagem: imagens[index],
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Image.asset(
+                              imagens[index],
+                              width: 30,
+                              height: 30,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 },
@@ -342,10 +456,93 @@ class NovoLayoutTextosLongos extends StatelessWidget {
               padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
               child: ElevatedButton(
                 onPressed: () {
+                  alterarImagens();
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                  textStyle: const TextStyle(fontSize: 18),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: const Text('Alterar Imagens'),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
+              child: ElevatedButton(
+                onPressed: () {
                   Navigator.pop(context);
                 },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                  textStyle: const TextStyle(fontSize: 18),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
                 child: const Text('Voltar'),
               ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ConteudoDaImagem extends StatelessWidget {
+  final String titulo;
+  final String imagem;
+
+  const ConteudoDaImagem({super.key, required this.titulo, required this.imagem});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(titulo),
+        backgroundColor: Colors.blue,
+        titleTextStyle: const TextStyle(
+          color: Colors.white,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10.0),
+              child: Image.asset(
+                imagem,
+                width: MediaQuery.of(context).size.width * 0.8,
+                height: MediaQuery.of(context).size.width * 0.8,
+                fit: BoxFit.cover,
+              ),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              'Conteúdo da imagem $titulo',
+              style: const TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 10),
+            Text(
+              'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
+              style: const TextStyle(fontSize: 16),
+              textAlign: TextAlign.justify,
             ),
           ],
         ),
