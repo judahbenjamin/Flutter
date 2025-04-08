@@ -33,10 +33,6 @@ class HomePage extends StatelessWidget {
             _buildButton(context, 'INSERIR', '/inserir'),
             SizedBox(height: 20),
             _buildButton(context, 'LISTAR', '/listar'),
-            SizedBox(height: 20),
-            _buildButton(context, 'EDITAR', '/editar_lista'),
-            SizedBox(height: 20),
-            _buildButton(context, 'EXCLUIR', '/excluir_lista'),
           ],
         ),
       ),
@@ -245,16 +241,16 @@ class _ListarPageState extends State<ListarPage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 ElevatedButton(
-                  onPressed: () async { // Adicionado async
+                  onPressed: () async {
                     if (_selectedIndex != null) {
-                      final result = await Navigator.push( // Adicionado await
+                      final result = await Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => EditarPage(index: _selectedIndex!),
                         ),
                       );
-                      if (result == true) { // Verifica o valor de retorno
-                        setState(() {}); // Atualiza a tela ListarPage
+                      if (result == true) {
+                        setState(() {});
                       }
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -413,7 +409,7 @@ class _EditarPageState extends State<EditarPage> {
                       'telefone': _telefoneController.text,
                     };
 
-                    Navigator.pop(context, true); // Adicionado valor de retorno
+                    Navigator.pop(context, true);
                   }
                 },
                 child: Text('SALVAR'),
