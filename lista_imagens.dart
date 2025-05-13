@@ -5,8 +5,8 @@ import 'dart:io';
 import 'package:path/path.dart' as path;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/foundation.dart';
-import 'package:universal_html/html.dart' as html; // Import para web
-
+import 'package:http/http.dart' as http; // Import para fazer upload
+import 'package:path_provider/path_provider.dart'; // Import para getApplicationDocumentsDirectory
 
 void main() {
   runApp(MyApp());
@@ -37,6 +37,9 @@ class _ListaDeImagensScreenState extends State<ListaDeImagensScreen> {
   List<String> _storedImageNames = [];
   final int _maxFileSizeMB = 5;
   String? _saveDirectory;
+  // Adicionei a URL do seu servidor aqui
+  final String _uploadUrl =
+      'http://seu_servidor/upload_imagem'; // Substitua pela URL correta
 
   @override
   void initState() {
@@ -46,13 +49,11 @@ class _ListaDeImagensScreenState extends State<ListaDeImagensScreen> {
 
   Future<void> _carregarImagensSalvas() async {
     if (_saveDirectory == null) {
-      _saveDirectory = (await getApplicationDocumentsDirectory()).path;
+      _saveDirectory = await _getDefaultSaveDirectory();
     }
     if (kIsWeb) {
-      setState(() {
-        _storedImageBytes = List.from(_selectedImageBytes);
-        _storedImageNames = List.from(_selectedImageNames);
-      });
+      // Se estiver na web, não tentaremos ler arquivos locais
+      setState(() {});
     } else {
       final directory = Directory(_saveDirectory!);
       if (directory.existsSync()) {
@@ -78,73 +79,13 @@ class _ListaDeImagensScreenState extends State<ListaDeImagensScreen> {
     }
   }
 
-  Future<void> _selecionarDiretorio() async {
-    if (kIsWeb) {
-      setState(() {
-        _saveDirectory = 'arquivos_salvos';
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content: Text(
-                'Diretório de salvamento padrão definido para: arquivos_salvos')),
-      );
-      _carregarImagensSalvas();
-    } else {
-      var status = await Permission.storage.status;
-      if (!status.isGranted) {
-        status = await Permission.storage.request();
-        if (status.isDenied) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                content: Text(
-                    'Permissão de armazenamento necessária para selecionar o diretório.')),
-          );
-          return;
-        }
-      }
-
-      try {
-        String? directory = await FilePicker.platform.getDirectoryPath();
-        print("Diretório selecionado: $directory");
-
-        if (directory != null) {
-          setState(() {
-            _saveDirectory = directory;
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                  content: Text(
-                      'Diretório de salvamento selecionado: $_saveDirectory')),
-            );
-          });
-          _carregarImagensSalvas();
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Nenhum diretório de salvamento selecionado.')),
-          );
-        }
-      } catch (e) {
-        print("Erro ao selecionar diretório: $e");
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erro ao selecionar diretório: $e')),
-        );
-      }
-    }
-  }
-
   Future<void> _selectImages() async {
-    if (_saveDirectory == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content: Text(
-                'Por favor, selecione um diretório de salvamento primeiro.')),
-      );
-      return;
-    }
-
     if (!kIsWeb) {
       var status = await Permission.storage.status;
+      print('Status da permissão de armazenamento ao selecionar: $status'); // Adicionado log
       if (!status.isGranted) {
         status = await Permission.storage.request();
+        print('Status da permissão de armazenamento após solicitação (seleção): $status'); // Adicionado log
         if (status.isDenied) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -209,54 +150,79 @@ class _ListaDeImagensScreenState extends State<ListaDeImagensScreen> {
   }
 
   Future<void> _gravarImagens() async {
-    if (_saveDirectory == null) {
+    if (kIsWeb) {
+      print('Salvar na web não está mais implementado neste código.');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content:
-                Text('Por favor, selecione um diretório de salvamento primeiro.')),
+        SnackBar(content: Text('Salvar na web não suportado.')),
       );
       return;
     }
 
-    if (!kIsWeb) {
-      var status = await Permission.storage.status;
-      if (!status.isGranted) {
-        status = await Permission.storage.request();
-        if (status.isDenied) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                content: Text(
-                    'Permissão de armazenamento necessária para salvar imagens.')),
-          );
-          return;
-        }
+    var status = await Permission.storage.status;
+    print('Status da permissão de armazenamento antes de gravar: $status'); // Adicionado log
+    if (!status.isGranted) {
+      status = await Permission.storage.request();
+      print('Status da permissão de armazenamento após a solicitação: $status'); // Adicionado log
+      if (status.isDenied) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text(
+                  'Permissão de armazenamento necessária para salvar as imagens.')),
+        );
+        return;
       }
+      // Se a permissão foi concedida agora, podemos prosseguir
+      if (status.isGranted) {
+        _salvarImagensNoDisco();
+      }
+    } else {
+      // A permissão já estava concedida
+      _salvarImagensNoDisco();
     }
+  }
 
+  Future<void> _salvarImagensNoDisco() async {
     if (_selectedImageNames.isNotEmpty && _selectedImageBytes.isNotEmpty) {
+      print('Diretório de salvamento: $_saveDirectory');
       for (int i = 0; i < _selectedImageNames.length; i++) {
-        String filePath = path.join(_saveDirectory!, _selectedImageNames[i]);
+        String fileName = _selectedImageNames[i];
+        Uint8List? imageBytes = _selectedImageBytes[i];
         try {
-          if (kIsWeb) {
-             // Usa a API do navegador para salvar o arquivo (download)
-            final blob = html.Blob([_selectedImageBytes[i]], 'image/jpeg');
-            final url = html.Url.createObjectUrlFromBlob(blob);
-            final anchor = html.AnchorElement(href: url)
-              ..setAttribute('download', _selectedImageNames[i])
-              ..click();
-            html.Url.revokeObjectUrl(url);
+          // Faz o upload para o servidor
+          var request = http.MultipartRequest('POST', Uri.parse(_uploadUrl));
+          var stream = http.ByteStream(Stream.fromIterable([imageBytes!]));
+          var length = imageBytes.length;
+
+          var multipartFile = http.MultipartFile(
+            'image', // Este é o nome do campo que o servidor espera receber
+            stream,
+            length,
+            filename: fileName,
+          );
+
+          request.files.add(multipartFile);
+          var response = await request.send();
+
+          if (response.statusCode == 200) {
+            print('Imagem "${fileName}" enviada com sucesso para o servidor.');
           } else {
-            File file = File(filePath);
-            await file.writeAsBytes(_selectedImageBytes[i]!);
-            print('Imagem "${_selectedImageNames[i]}" salva em: $filePath');
+            print(
+                'Erro ao enviar imagem "${fileName}". Status code: ${response.statusCode}');
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                  content: Text(
+                      'Erro ao enviar imagem "${fileName}": ${response.reasonPhrase}')),
+            );
+            return; // Importante: interrompe o processo se o upload falhar
           }
         } catch (e) {
+          print('Erro ao salvar/enviar imagem "${fileName}": $e');
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
                 content: Text(
-                    'Erro ao salvar "${_selectedImageNames[i]}": $e')),
+                    'Erro ao salvar/enviar imagem "${fileName}": $e')), // Mostra o erro
           );
-          return;
+          return; // Interrompe o processo em caso de erro
         }
       }
 
@@ -340,21 +306,13 @@ class _ListaDeImagensScreenState extends State<ListaDeImagensScreen> {
     }
   }
 
-  Future<Directory> getApplicationDocumentsDirectory() async {
-    if (kIsWeb) {
-      return Directory('arquivos_salvos');
-    } else {
-      return await getApplicationDocumentsDirectoryNative();
-    }
-  }
-
-  Future<Directory> getApplicationDocumentsDirectoryNative() async{
-    return Directory(await _getDefaultSaveDirectory());
-  }
-
   Future<String> _getDefaultSaveDirectory() async {
-    if (Platform.isAndroid) {
-      return '/storage/emulated/0/Pictures/MeuAppImagens';
+    if (kIsWeb) {
+      // Define um diretório padrão para web, mesmo que a funcionalidade de salvar seja removida
+      return 'arquivos_salvos';
+    } else if (Platform.isAndroid) {
+      final directory = await getExternalStorageDirectory();
+      return directory?.path ?? '/storage/emulated/0/Pictures/MeuAppImagens';
     } else if (Platform.isIOS) {
       final directory = await getApplicationDocumentsDirectory();
       return directory.path;
@@ -370,17 +328,10 @@ class _ListaDeImagensScreenState extends State<ListaDeImagensScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:  Text('Meu App de Imagens'),
+        title: Text('Meu App de Imagens'),
       ),
       body: Column(
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton(
-              onPressed: _selecionarDiretorio,
-              child: Text('Selecionar Diretório de Salvamento'),
-            ),
-          ),
           Expanded(
             child: Container(
               decoration: BoxDecoration(
@@ -400,8 +351,7 @@ class _ListaDeImagensScreenState extends State<ListaDeImagensScreen> {
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child:
-                                Text('${index + 1}. ${_storedImageNames[index]}'),
+                            child: Text('${index + 1}. ${_storedImageNames[index]}'),
                           ),
                         );
                       },
@@ -472,4 +422,3 @@ class ExibeImagemScreen extends StatelessWidget {
     );
   }
 }
-
