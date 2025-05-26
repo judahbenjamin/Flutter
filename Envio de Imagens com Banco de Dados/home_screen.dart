@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'cadastro_objeto_screen.dart'; // Importe a tela de cadastro
 import 'database_helper.dart'; // Importe o gerenciador de BD
+import 'gerenciar_objetos_screen.dart'; // Adicione este import
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -60,15 +61,11 @@ class HomeScreen extends StatelessWidget {
                 height: 50,
                 child: ElevatedButton(
                   onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text(
-                          'Navegar para Tela de Gerenciamento (próximo passo!)',
-                        ),
-                      ),
-                    );
-                    // AQUI SERÁ A NAVEGAÇÃO PARA GerenciarObjetosScreen
-                  },
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const GerenciarObjetosScreen()),
+                      );
+                    },
                   child: const Text(
                     'GERENCIAR',
                     style: TextStyle(fontSize: 18),
