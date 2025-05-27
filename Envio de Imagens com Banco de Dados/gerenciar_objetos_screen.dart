@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'database_helper.dart'; // Importe o gerenciador de BD
 import 'Objeto.dart'; // Importe o modelo Objeto
 import 'cadastro_objeto_screen.dart'; // Para navegar para a tela de edição
+import 'detalhes_objeto_screen.dart'; // Para navegar para a tela de detalhes
+import 'dart:io'; // Para o tipo File, usado para exibir imagens locais
 
 class GerenciarObjetosScreen extends StatefulWidget {
   const GerenciarObjetosScreen({super.key});
@@ -63,7 +65,6 @@ class _GerenciarObjetosScreenState extends State<GerenciarObjetosScreen> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,19 +81,54 @@ class _GerenciarObjetosScreenState extends State<GerenciarObjetosScreen> {
                     itemCount: dbHelper.objetos.length,
                     itemBuilder: (context, index) {
                       final objeto = dbHelper.objetos[index];
+
                       return Card( // Usando Card para um visual mais agradável
                         margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                         elevation: 3,
                         child: ListTile(
-                          leading: objeto.imagem != null && objeto.imagem!.isNotEmpty
-                              ? CircleAvatar(
-                                  backgroundImage: NetworkImage(objeto.imagem!),
-                                  onBackgroundImageError: (exception, stackTrace) {
-                                    // Fallback se a imagem da URL não carregar
-                                    print('Erro ao carregar imagem: $exception');
-                                  },
-                                )
-                              : const CircleAvatar(child: Icon(Icons.inventory)), // Ícone padrão
+                          leading: GestureDetector( // Use GestureDetector para adicionar o onTap ao CircleAvatar
+                            onTap: () {
+                              // Verifica se há uma imagem para exibir antes de navegar
+                              if (objeto.imagem != null && objeto.imagem!.isNotEmpty) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => DetalhesObjetoScreen(objeto: objeto),
+                                  ),
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text('Nenhuma imagem para visualizar.')),
+                                );
+                              }
+                            },
+                            child: CircleAvatar( // SEU CircleAvatar EXISTENTE
+                              backgroundColor: Colors.grey[200], // Um fundo leve para o avatar
+                              child: (objeto.imagem != null && objeto.imagem!.isNotEmpty)
+                                  ? ClipOval( // Garante que a imagem seja circular
+                                      child: (objeto.imagem!.startsWith('/') || objeto.imagem!.startsWith('file://'))
+                                          ? Image.file(
+                                              File(objeto.imagem!),
+                                              fit: BoxFit.cover,
+                                              width: double.infinity,
+                                              height: double.infinity,
+                                              errorBuilder: (context, error, stackTrace) =>
+                                                  const Icon(Icons.broken_image, size: 24.0, color: Colors.red),
+                                            )
+                                          : (objeto.imagem!.startsWith('http://') || objeto.imagem!.startsWith('https://'))
+                                              ? Image.network(
+                                                  objeto.imagem!,
+                                                  fit: BoxFit.cover,
+                                                  width: double.infinity,
+                                                  height: double.infinity,
+                                                  errorBuilder: (context, error, stackTrace) =>
+                                                      const Icon(Icons.error_outline, size: 24.0, color: Colors.red),
+                                                )
+                                              : const Icon(Icons.inventory, size: 24.0), // Fallback para caminhos inválidos
+                                    )
+                                  : const Icon(Icons.inventory, size: 24.0), // Ícone padrão se não houver imagem
+                            ),
+                          ),
                           title: Text(objeto.objeto),
                           subtitle: Text(objeto.descricao),
                           trailing: Row(
