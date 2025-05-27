@@ -6,24 +6,44 @@ import 'home_screen.dart';
 import 'database_helper.dart';
 
 void main() async {
-  // Garante que o Flutter esteja inicializado antes de qualquer operação
+  // Garante que os bindings do Flutter estejam inicializados.
+  // Isso é necessário antes de qualquer operação assíncrona ou de acesso a plugins.
   WidgetsFlutterBinding.ensureInitialized();
 
-  final dbHelper = DatabaseHelper();
-  await dbHelper.carregarObjetos();
+  // Inicializa o DatabaseHelper.
+  // Ao acessar o getter 'database' de DatabaseHelper(), estamos garantindo
+  // que o banco de dados seja inicializado e esteja pronto.
+  // O 'await' é crucial aqui para que o aplicativo não comece a construir a UI
+  // antes que o banco de dados esteja acessível, evitando erros de 'Null'.
+  await DatabaseHelper().database;
 
-  runApp(
-    const MaterialApp( // Adicione o 'const' aqui
-      home: HomeScreen(), // Agora, o aplicativo inicia com a HomeScreen
-      debugShowCheckedModeBanner: false, // Opcional: remove o banner de debug
-    ),
-  );
+  // Uma vez que o banco de dados está pronto, o aplicativo principal pode ser executado.
+  runApp(const MyApp());
 }
 
 // A CLASSE ExemploGravaBanco SERÁ MODIFICADA OU REUTILIZADA EM OUTRAS TELAS.
 // Por enquanto, vamos manter a classe _ExemploGravaBancoState com toda a lógica de BD,
 // mas REMOVER (ou comentar) o método `build` dela,
 // pois a UI será definida pelas novas telas.
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Minhas Coisas!', // Título do aplicativo
+      theme: ThemeData(
+        primarySwatch: Colors.blue, // Define a cor primária do tema
+        // Adiciona um VisualDensity adaptativo para melhor aparência
+        // em diferentes plataformas (Android, iOS, etc.).
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: const HomeScreen(), // Define a HomeScreen como a tela inicial do aplicativo
+      debugShowCheckedModeBanner: false, // Remove o banner "DEBUG" do canto superior direito
+    );
+  }
+}
 
 class ExemploGravaBanco extends StatefulWidget {
   const ExemploGravaBanco({super.key});
